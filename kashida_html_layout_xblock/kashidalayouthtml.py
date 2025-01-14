@@ -19,7 +19,7 @@ xblock_loader = ResourceLoader(__name__)
 
 
 @XBlock.wants('settings')
-class KashidaLayoutsXBlock(StudioEditableXBlockMixin, XBlock):
+class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     """
     Kashida Layouts XBlock that provides predefined layout options like
     image-left-text-right or image-right-text-left.

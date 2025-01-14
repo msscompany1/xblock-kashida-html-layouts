@@ -128,10 +128,9 @@ setup(
     install_requires=load_requirements('requirements/base.in'),
     python_requires=">=3.8",
     keywords='Python edx',
-    entry_points={
-    'xblock.v1': [
-        'kashida_html_layout = kashida_html_layout_xblock:HTML5XBlock',  # Register your new XBlock
-    ]
-},
-
+      entry_points={
+        'xblock.v1': [
+            'kashida_html_layout = kashida_html_layout_xblock:KashidaHTMLLayoutXBlock ',
+        ],
+    }
 )
