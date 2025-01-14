@@ -32,14 +32,14 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         default=_('Kashida Layout')
     )
     layout = String(
-        display_name="Layout",
-        help="Choose the layout for displaying content.",
-        values=[
-            ('left_right', "Left Text, Right Image"),
-            ('top_bottom', "Top Image, Bottom Text"),
-            ('side_by_side', "Side by Side"),
+    display_name="Layout",
+    help="Choose the layout for displaying content.",
+    values=[
+            {"value": "left_right", "display_name": "Left Text, Right Image"},
+            {"value": "top_bottom", "display_name": "Top Image, Bottom Text"},
+            {"value": "side_by_side", "display_name": "Side by Side"},
         ],
-        default='left_right',
+        default="left_right",
         scope=Scope.settings
     )
 
@@ -134,33 +134,15 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
         return [
-            ('HTML5XBlock',
-             """<html5/>
-             """),
-            ('HTML5XBlock with sanitized content',
-             """<html5 data="My custom &lt;b&gt;html&lt;/b&gt;"/>
-             """),
-            ('HTML5XBlock with JavaScript',
-             """<html5
-                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
-                    allow_javascript="true"
-                />
-             """),
-            ('HTML5XBlock with JavaScript not allowed',
-             """<html5
-                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
-                    allow_javascript="false"
-                />
-             """),
-            ('Multiple HTML5XBlock',
-             """<vertical_demo>
-                <html5/>
-                <html5/>
-                <html5/>
-                </vertical_demo>
-             """),
+        ('KashidaHTMLLayoutXBlock',
+         """<kashidahtml/>"""),
+        ('Multiple KashidaHTMLLayoutXBlock',
+         """<vertical_demo>
+            <kashidahtml/>
+            <kashidahtml/>s
+            </vertical_demo>
+         """),
         ]
-
     def add_edit_stylesheets(self, frag):
         """
         A helper method to add all styles to the fragment necesesary for edit.
@@ -241,7 +223,8 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         I.E: Sanitized data if it's true or plain data if it's false.
         """
         data = self.substitute_keywords()
-        html = SanitizedText(data, allow_javascript=self.allow_javascript)
+        html = SanitizedText(data)
+
         return html
 
     def get_editable_fields(self):
@@ -271,7 +254,7 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         return fields
 
 
-class ExcludedHTML5XBlock(KashidaLayoutsXBlock):
+class ExcludedHTML5XBlock(KashidaHTMLLayoutXBlock):
     """
     This XBlock is excluded from the completion calculations.
     """
