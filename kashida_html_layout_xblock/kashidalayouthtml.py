@@ -29,7 +29,7 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         display_name=_('Display Name'),
         help=_('The display name for this component.'),
         scope=Scope.settings,
-        default=_('Kashida Layout')
+        default=_('Kashida HTML Layouts ')
     )
     layout = String(
     display_name="Layout",
@@ -58,7 +58,9 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     )
     editable_fields = ('display_name', 'editor', 'layout')
     block_settings_key = "kashida_layouts"
-
+    def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.data = ''  
     def get_settings(self):
         """
         Get the XBlock settings bucket via the SettingsService.
