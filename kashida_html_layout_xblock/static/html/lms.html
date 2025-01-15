@@ -6,14 +6,14 @@
         <p>{{ self.text | safe }}</p>
       </div>
       <div class="image-right">
-        <img src="{{ self.image_url | default: '{% static 'images/default.png' %}' }}" alt="Right Image" />
+        <img src="{{ self.image_url }}" alt="Right Image" />
       </div>
     </div>
   
     {% elif self.layout == "top_bottom" %}
     <div class="top-bottom-layout">
       <div class="image-top">
-        <img src="{{ self.image_url | default: '{% static 'images/default.png' %}' }}" alt="Top Image" />
+        <img src="{{ self.image_url }}" alt="Top Image" />
       </div>
       <div class="text-bottom">
         <p>{{ self.text | safe }}</p>
@@ -26,11 +26,12 @@
         <p>{{ self.text | safe }}</p>
       </div>
       <div class="side-image">
-        <img src="{{ self.image_url | default: '{% static 'images/default.png' %}' }}" alt="Side Image" />
+        <img src="{{ self.image_url }}" alt="Side Image" />
       </div>
     </div>
   
     {% else %}
+    <!-- Default Layout -->
     <p>{{ self.html | safe }}</p>
     {% endif %}
   
