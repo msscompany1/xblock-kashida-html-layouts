@@ -31,9 +31,10 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         scope=Scope.settings,
         default=_('Kashida HTML Layouts ')
     )
+    data = String(help=_('Choose the layout for displaying content'), default='', scope=Scope.content)
     layout = String(
     display_name="Layout",
-    help="Choose the layout for displaying content.",
+    help=_("Choose a predefined layout to display your content."),
     values=[
             {"value": "left_right", "display_name": "Left Text, Right Image"},
             {"value": "top_bottom", "display_name": "Top Image, Bottom Text"},
