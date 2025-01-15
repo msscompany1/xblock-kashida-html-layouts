@@ -4,11 +4,50 @@
     <button class="tablinks" aria-selected="false" onclick="openTab(event, 'settings')">Settings</button>
   </div>
 
+  <!-- Editor Tab -->
   <div id="editor" class="tabcontent">
     <div class="html-editor editor">
-      <div class="row">
-        <textarea id="html5-textarea">{{ self.data }}</textarea>
+      <!-- Dynamic Layout Based on Selected Setting -->
+      {% if self.layout == "left_right" %}
+      <div class="left-right-layout">
+        <div class="text-left">
+          <label for="left-text">Text</label>
+          <textarea id="left-text" class="form-control" placeholder="Enter text">{{ self.data.text }}</textarea>
+        </div>
+        <div class="image-right">
+          <label for="right-image">Image</label>
+          <input type="file" id="right-image" class="form-control" />
+        </div>
       </div>
+
+      {% elif self.layout == "top_bottom" %}
+      <div class="top-bottom-layout">
+        <div class="image-top">
+          <label for="top-image">Image</label>
+          <input type="file" id="top-image" class="form-control" />
+        </div>
+        <div class="text-bottom">
+          <label for="bottom-text">Text</label>
+          <textarea id="bottom-text" class="form-control" placeholder="Enter text">{{ self.data.text }}</textarea>
+        </div>
+      </div>
+
+      {% elif self.layout == "side_by_side" %}
+      <div class="side-by-side-layout">
+        <div class="side-text">
+          <label for="side-text">Text</label>
+          <textarea id="side-text" class="form-control" placeholder="Enter text">{{ self.data.text }}</textarea>
+        </div>
+        <div class="side-image">
+          <label for="side-image">Image</label>
+          <input type="file" id="side-image" class="form-control" />
+        </div>
+      </div>
+      {% else %}
+      <div class="default-layout">
+        <p>Please select a layout from the settings tab.</p>
+      </div>
+      {% endif %}
     </div>
     <div class="xblock-actions">
       <span class="xblock-editor-error-message"></span>

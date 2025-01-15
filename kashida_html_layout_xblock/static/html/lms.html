@@ -1,1 +1,41 @@
-<div class="html5_xblock xmodule_display xmodule_HtmlBlock">{{ self.html | safe }}</div>
+<div class="html5_xblock xmodule_display xmodule_HtmlBlock">
+
+    {% if self.layout == "left_right" %}
+    <!-- Left Text, Right Image Layout -->
+    <div class="left-right-layout">
+      <div class="text-left">
+        <p>{{ self.text | safe }}</p>
+      </div>
+      <div class="image-right">
+        <img src="{{ self.image_url }}" alt="Right Image" />
+      </div>
+    </div>
+  
+    {% elif self.layout == "top_bottom" %}
+    <!-- Top Image, Bottom Text Layout -->
+    <div class="top-bottom-layout">
+      <div class="image-top">
+        <img src="{{ self.image_url }}" alt="Top Image" />
+      </div>
+      <div class="text-bottom">
+        <p>{{ self.text | safe }}</p>
+      </div>
+    </div>
+  
+    {% elif self.layout == "side_by_side" %}
+    <!-- Side by Side Layout -->
+    <div class="side-by-side-layout">
+      <div class="side-text">
+        <p>{{ self.text | safe }}</p>
+      </div>
+      <div class="side-image">
+        <img src="{{ self.image_url }}" alt="Side Image" />
+      </div>
+    </div>
+  
+    {% else %}
+    <!-- Default Layout -->
+    <p>{{ self.html | safe }}</p>
+    {% endif %}
+  
+  </div>
