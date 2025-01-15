@@ -1,3 +1,4 @@
+/* Base Styles */
 .html-editor,
 .wrapper-comp-settings.is-active.editor-with-buttons {
     height: 320px;
@@ -8,14 +9,13 @@
     height: 322px;
 }
 
-/* Style the tab */
+/* Tab Styles */
 .tab {
     overflow: hidden;
     border: 1px solid #ccc;
     background-color: #f1f1f1;
 }
 
-/* Style the buttons inside the tab */
 .tab button {
     background-color: inherit;
     float: left;
@@ -37,4 +37,80 @@
 
 .tabcontent {
     display: none;
+}
+
+/* Layout Styles */
+
+/* Left Text, Right Image */
+.left-right-layout {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.left-right-layout .text-left {
+    width: 50%;
+}
+
+.left-right-layout .image-right {
+    width: 50%;
+}
+
+.left-right-layout img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Top Image, Bottom Text */
+.top-bottom-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.top-bottom-layout .image-top {
+    text-align: center;
+}
+
+.top-bottom-layout img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+.top-bottom-layout .text-bottom {
+    padding: 10px;
+}
+
+/* Side by Side */
+.side-by-side-layout {
+    display: flex;
+    gap: 20px;
+}
+
+.side-by-side-layout .side-text,
+.side-by-side-layout .side-image {
+    width: 50%;
+}
+
+.side-by-side-layout img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ccc;
+    padding: 5px;
+    background-color: #f9f9f9;
+}
+
+/* Default Layout Message */
+.default-layout {
+    padding: 20px;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
 }
