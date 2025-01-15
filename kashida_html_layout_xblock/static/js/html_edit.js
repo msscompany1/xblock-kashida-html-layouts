@@ -1,4 +1,4 @@
-/* JavaScript for HTMLXBlock. */
+/* Updated JavaScript for Kashida Layout HTML XBlock */
 
 const CUSTOM_FONTS = "Default='Open Sans', Verdana, Arial, Helvetica, sans-serif;";
 const STANDARD_FONTS = "Andale Mono=andale mono,times;" +
@@ -21,26 +21,25 @@ const STANDARD_FONTS = "Andale Mono=andale mono,times;" +
 const FONTS = CUSTOM_FONTS + STANDARD_FONTS;
 
 function openTab(evt, tabName) {
-    var i, tabcontent, tablinks;
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-        tablinks[i].setAttribute("aria-selected", false);
-    }
+    const tabcontent = document.querySelectorAll(".tabcontent");
+    const tablinks = document.querySelectorAll(".tablinks");
+
+    tabcontent.forEach(tab => tab.style.display = "none");
+    tablinks.forEach(link => {
+        link.classList.remove("active");
+        link.setAttribute("aria-selected", false);
+    });
+
     document.getElementById(tabName).style.display = "block";
-    evt.currentTarget.className += " active";
+    evt.currentTarget.classList.add("active");
     evt.currentTarget.setAttribute("aria-selected", true);
 }
 
 function configureTheEditor(data) {
     const contentSelector = "textarea#html5-textarea";
     const languageWrapper = document.querySelectorAll(".wrapper-view, .window-wrap");
-    const directionality = (languageWrapper.length > 0) ? languageWrapper.dir : "ltr";
-    var editor;
+    const directionality = (languageWrapper.length > 0) ? languageWrapper[0].dir : "ltr";
+    let editor;
 
     if (data.editor === "visual") {
         tinymce.remove(contentSelector);
@@ -48,7 +47,6 @@ function configureTheEditor(data) {
             script_url: data.script_url,
             skin_url: data.skin_url,
             theme: "silver",
-            skin: "studio-tmce5",
             schema: "html5",
             convert_urls: false,
             directionality: directionality,
@@ -58,36 +56,17 @@ function configureTheEditor(data) {
             valid_elements: "*[*]",
             extended_valid_elements: "*[*]",
             valid_children: "+body[style]",
-            invalid_elements: "",
             font_formats: FONTS,
             toolbar: "formatselect | fontselect | bold italic underline forecolor codesample | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent blockquote | link unlink image | table tabledelete | code",
             table_class_list: data.table_custom_classes.map(c => ({ title: c, value: c })),
             external_plugins: data.external_plugins,
-            formats: {
-                code: {
-                    inline: 'code'
-                }
-            },
-            visual: false,
             image_advtab: true,
-            block_formats: "Paragraph=p;Preformatted=pre;Heading 3=h3;Heading 4=h4;Heading 5=h5;Heading 6=h6",
             width: '100%',
             height: '315px',
             browser_spellcheck: true,
-            codemirror: {
-                path: data.codemirror_path,
-                jsFiles: ["codemirror-compressed.js"],
-                cssFiles: ["CodeMirror/codemirror.css"],
-                width: 770,
-                height: 454,
-                saveCursorPosition: false,
-                config: {
-                    mode: 'text/html',
-                }
-            }
         });
     } else {
-        editor = CodeMirror.fromTextArea(document.querySelectorAll(contentSelector)[0], {
+        editor = CodeMirror.fromTextArea(document.querySelector(contentSelector), {
             mode: "text/html",
             lineNumbers: true,
             matchBrackets: true,
@@ -98,16 +77,29 @@ function configureTheEditor(data) {
     return editor;
 }
 
-function displayImageWithText(imageUrl, textContent) {
+function displayImageWithText(imageUrl, textContent, layout) {
     const displayArea = document.getElementById('display-area');
     displayArea.innerHTML = `
-        <div class="layout">
+        <div class="layout ${layout}">
             <div class="text-content">${textContent}</div>
             <div class="image-content">
                 <img src="${imageUrl}" alt="Uploaded Image">
             </div>
         </div>
     `;
+}
+
+function previewImage() {
+    const imageInput = document.querySelector('#image-upload');
+    const previewArea = document.querySelector('#image-preview');
+
+    if (imageInput.files && imageInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            previewArea.innerHTML = `<img src="${e.target.result}" alt="Image Preview" />`;
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+    }
 }
 
 function studioSubmit() {
@@ -118,7 +110,8 @@ function studioSubmit() {
     const imageUrl = imageInput.files[0] ? URL.createObjectURL(imageInput.files[0]) : '';
 
     if (imageUrl) {
-        displayImageWithText(imageUrl, textContent);
+        const selectedLayout = document.querySelector('input[name="layout-option"]:checked').value;
+        displayImageWithText(imageUrl, textContent, selectedLayout);
     } else {
         alert('Please upload an image.');
     }
@@ -142,4 +135,6 @@ function HTML5XBlock(runtime, element, data) {
             runtime.notify('cancel', {});
         });
     });
+
+    document.querySelector('#image-upload').addEventListener('change', previewImage);
 }

@@ -4,10 +4,8 @@
     <button class="tablinks" aria-selected="false" onclick="openTab(event, 'settings')">Settings</button>
   </div>
 
-  <!-- Editor Tab -->
   <div id="editor" class="tabcontent">
     <div class="html-editor editor">
-      <!-- Dynamic Layout Based on Selected Setting -->
       {% if self.layout == "left_right" %}
       <div class="left-right-layout">
         <div class="text-left">
@@ -16,7 +14,8 @@
         </div>
         <div class="image-right">
           <label for="right-image">Image</label>
-          <input type="file" id="right-image" class="form-control" />
+          <input type="file" id="right-image" class="form-control" onchange="previewImage('right-image-preview', this)">
+          <img id="right-image-preview" class="image-preview" src="{{ self.data.image }}" alt="Preview" />
         </div>
       </div>
 
@@ -24,7 +23,8 @@
       <div class="top-bottom-layout">
         <div class="image-top">
           <label for="top-image">Image</label>
-          <input type="file" id="top-image" class="form-control" />
+          <input type="file" id="top-image" class="form-control" onchange="previewImage('top-image-preview', this)">
+          <img id="top-image-preview" class="image-preview" src="{{ self.data.image }}" alt="Preview" />
         </div>
         <div class="text-bottom">
           <label for="bottom-text">Text</label>
@@ -40,9 +40,11 @@
         </div>
         <div class="side-image">
           <label for="side-image">Image</label>
-          <input type="file" id="side-image" class="form-control" />
+          <input type="file" id="side-image" class="form-control" onchange="previewImage('side-image-preview', this)">
+          <img id="side-image-preview" class="image-preview" src="{{ self.data.image }}" alt="Preview" />
         </div>
       </div>
+
       {% else %}
       <div class="default-layout">
         <p>Please select a layout from the settings tab.</p>
