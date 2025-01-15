@@ -58,9 +58,6 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     )
     editable_fields = ('display_name', 'editor', 'layout')
     block_settings_key = "kashida_layouts"
-    def __init__(self, *args, **kwargs):
-            super().__init__(*args, **kwargs)
-            self.data = ''  
     def get_settings(self):
         """
         Get the XBlock settings bucket via the SettingsService.

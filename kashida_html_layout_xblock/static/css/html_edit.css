@@ -1,217 +1,40 @@
-/* Base Styles */
 .html-editor,
 .wrapper-comp-settings.is-active.editor-with-buttons {
-    height: auto; /* Allow for dynamic height */
-    min-height: 320px; /* Ensure a minimum height */
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: auto; /* Handle content overflow */
+    height: 320px;
 }
 
 [class*="view-"] .modal-window .CodeMirror,
 [class*="view-"] .modal-window .editor-with-buttons.wrapper-comp-settings .list-input.settings-list {
     height: 322px;
-    overflow: auto; /* Handle overflow for these specific elements */
 }
 
-/* Tab Styles */
+/* Style the tab */
 .tab {
     overflow: hidden;
-    border-radius: 10px 10px 0 0;
-    background-color: #4CAF50;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
 }
 
+/* Style the buttons inside the tab */
 .tab button {
-    background-color: #ffffff;
-    color: #4CAF50;
+    background-color: inherit;
     float: left;
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 20px;
+    padding: 14px 16px;
     transition: 0.3s;
     font-size: 17px;
-    font-weight: bold;
 }
 
 .tab button:hover {
-    background-color: #45a049;
-    color: #ffffff;
+    background-color: #ddd;
 }
 
 .tab button.active {
-    background-color: #4CAF50;
-    color: #ffffff;
+    background-color: #ccc;
 }
 
-/* Tab Content */
 .tabcontent {
     display: none;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-top: none;
-    background-color: #f9f9f9;
-    border-radius: 0 0 10px 10px;
-}
-
-/* Layout Styles */
-
-/* Left Text, Right Image */
-.html-editor .left-right-layout {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 20px;
-    padding: 20px;
-    background-color: #e7f5e8;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.html-editor .left-right-layout .text-left {
-    width: 50%;
-}
-
-.html-editor .left-right-layout .image-right {
-    width: 50%;
-    text-align: center;
-}
-
-.html-editor .left-right-layout img {
-    max-width: 100%;
-    height: auto;
-    border: 2px solid #4CAF50;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #ffffff;
-}
-
-/* Top Image, Bottom Text */
-.html-editor .top-bottom-layout {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 10px;
-}
-
-.html-editor .top-bottom-layout .image-top {
-    text-align: center;
-}
-
-.html-editor .top-bottom-layout img {
-    max-width: 100%;
-    height: auto;
-    border: 2px solid #4CAF50;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #ffffff;
-}
-
-.html-editor .top-bottom-layout .text-bottom {
-    padding: 15px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-/* Side by Side */
-.html-editor .side-by-side-layout {
-    display: flex;
-    gap: 20px;
-    padding: 20px;
-    background-color: #eef7ee;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-.html-editor .side-by-side-layout .side-text,
-.html-editor .side-by-side-layout .side-image {
-    width: 50%;
-}
-
-.html-editor .side-by-side-layout img {
-    max-width: 100%;
-    height: auto;
-    border: 2px solid #4CAF50;
-    padding: 10px;
-    border-radius: 10px;
-    background-color: #ffffff;
-}
-
-/* Default Layout Message */
-.default-layout {
-    padding: 20px;
-    text-align: center;
-    background-color: #f9f9f9;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-}
-
-/* Buttons */
-.button {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 10px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    color: #ffffff;
-    background-color: #4CAF50;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.button:hover {
-    background-color: #45a049;
-}
-
-.action-primary {
-    background-color: #007BFF;
-}
-
-.cancel-button {
-    background-color: #FF3D00;
-}
-
-.cancel-button:hover {
-    background-color: #FF6E40;
-}
-
-/* Input Fields */
-textarea,
-input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    margin-bottom: 16px;
-    display: inline-block;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-textarea:focus,
-input[type="file"]:focus {
-    border-color: #4CAF50;
-    outline: none;
-}
-
-/* Responsive Design */
-@media screen and (max-width: 768px) {
-    .html-editor .left-right-layout,
-    .html-editor .side-by-side-layout {
-        flex-direction: column;
-    }
-
-    .html-editor .left-right-layout .text-left,
-    .html-editor .left-right-layout .image-right,
-    .html-editor .side-by-side-layout .side-text,
-    .html-editor .side-by-side-layout .side-image {
-        width: 100%;
-    }
 }
