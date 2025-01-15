@@ -7,7 +7,7 @@
 
 /* fall back to default browser styles for all rows; the inline styles (like
  * border style and color) would overwrite it */
-.studio-xblock-wrapper .html5_xblock table > * > tr {
+ .studio-xblock-wrapper .html5_xblock table > * > tr {
   border: unset;
 }
 
@@ -74,79 +74,4 @@
 .studio-xblock-wrapper .html5_xblock table[border] > th {
   border-width: thin;
   border-style: inset;
-}
-/* Layout Styles for Preview */
-
-/* Left Text, Right Image Layout */
-.studio-xblock-wrapper .left-right-layout {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-}
-
-.studio-xblock-wrapper .left-right-layout .text-left {
-  width: 50%;
-}
-
-.studio-xblock-wrapper .left-right-layout .image-right {
-  width: 50%;
-}
-
-.studio-xblock-wrapper .left-right-layout img {
-  max-width: 100%;
-  height: auto;
-  border: 1px solid #ccc;
-  padding: 5px;
-  background-color: #f9f9f9;
-}
-
-/* Top Image, Bottom Text Layout */
-.studio-xblock-wrapper .top-bottom-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.studio-xblock-wrapper .top-bottom-layout .image-top {
-  text-align: center;
-}
-
-.studio-xblock-wrapper .top-bottom-layout img {
-  max-width: 100%;
-  height: auto;
-  border: 1px solid #ccc;
-  padding: 5px;
-  background-color: #f9f9f9;
-}
-
-.studio-xblock-wrapper .top-bottom-layout .text-bottom {
-  padding: 10px;
-}
-
-/* Side by Side Layout */
-.studio-xblock-wrapper .side-by-side-layout {
-  display: flex;
-  gap: 20px;
-}
-
-.studio-xblock-wrapper .side-by-side-layout .side-text,
-.studio-xblock-wrapper .side-by-side-layout .side-image {
-  width: 50%;
-}
-
-.studio-xblock-wrapper .side-by-side-layout img {
-  max-width: 100%;
-  height: auto;
-  border: 1px solid #ccc;
-  padding: 5px;
-  background-color: #f9f9f9;
-}
-
-/* Default Layout Message */
-.studio-xblock-wrapper .default-layout {
-  padding: 20px;
-  text-align: center;
-  background-color: #f9f9f9;
-  border: 1px solid #ccc;
 }

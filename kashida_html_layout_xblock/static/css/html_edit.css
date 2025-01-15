@@ -1,15 +1,18 @@
 /* Base Styles */
 .html-editor,
 .wrapper-comp-settings.is-active.editor-with-buttons {
-    height: 320px;
+    height: auto; /* Allow for dynamic height */
+    min-height: 320px; /* Ensure a minimum height */
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: auto; /* Handle content overflow */
 }
 
 [class*="view-"] .modal-window .CodeMirror,
 [class*="view-"] .modal-window .editor-with-buttons.wrapper-comp-settings .list-input.settings-list {
     height: 322px;
+    overflow: auto; /* Handle overflow for these specific elements */
 }
 
 /* Tab Styles */
@@ -55,7 +58,7 @@
 /* Layout Styles */
 
 /* Left Text, Right Image */
-.left-right-layout {
+.html-editor .left-right-layout {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -66,16 +69,16 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.left-right-layout .text-left {
+.html-editor .left-right-layout .text-left {
     width: 50%;
 }
 
-.left-right-layout .image-right {
+.html-editor .left-right-layout .image-right {
     width: 50%;
     text-align: center;
 }
 
-.left-right-layout img {
+.html-editor .left-right-layout img {
     max-width: 100%;
     height: auto;
     border: 2px solid #4CAF50;
@@ -85,7 +88,7 @@
 }
 
 /* Top Image, Bottom Text */
-.top-bottom-layout {
+.html-editor .top-bottom-layout {
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -94,11 +97,11 @@
     border-radius: 10px;
 }
 
-.top-bottom-layout .image-top {
+.html-editor .top-bottom-layout .image-top {
     text-align: center;
 }
 
-.top-bottom-layout img {
+.html-editor .top-bottom-layout img {
     max-width: 100%;
     height: auto;
     border: 2px solid #4CAF50;
@@ -107,7 +110,7 @@
     background-color: #ffffff;
 }
 
-.top-bottom-layout .text-bottom {
+.html-editor .top-bottom-layout .text-bottom {
     padding: 15px;
     background-color: #ffffff;
     border-radius: 10px;
@@ -115,7 +118,7 @@
 }
 
 /* Side by Side */
-.side-by-side-layout {
+.html-editor .side-by-side-layout {
     display: flex;
     gap: 20px;
     padding: 20px;
@@ -124,12 +127,12 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
-.side-by-side-layout .side-text,
-.side-by-side-layout .side-image {
+.html-editor .side-by-side-layout .side-text,
+.html-editor .side-by-side-layout .side-image {
     width: 50%;
 }
 
-.side-by-side-layout img {
+.html-editor .side-by-side-layout img {
     max-width: 100%;
     height: auto;
     border: 2px solid #4CAF50;
@@ -200,15 +203,15 @@ input[type="file"]:focus {
 
 /* Responsive Design */
 @media screen and (max-width: 768px) {
-    .left-right-layout,
-    .side-by-side-layout {
+    .html-editor .left-right-layout,
+    .html-editor .side-by-side-layout {
         flex-direction: column;
     }
 
-    .left-right-layout .text-left,
-    .left-right-layout .image-right,
-    .side-by-side-layout .side-text,
-    .side-by-side-layout .side-image {
+    .html-editor .left-right-layout .text-left,
+    .html-editor .left-right-layout .image-right,
+    .html-editor .side-by-side-layout .side-text,
+    .html-editor .side-by-side-layout .side-image {
         width: 100%;
     }
 }
