@@ -245,45 +245,37 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
     @property
     def html(self):
         """
-        Returns the module content based on the selected layout and data.
+        A property that returns this module's content data with layout rendering applied.
+        Substitutes keywords and includes layout-specific wrapping if applicable.
         """
+        # Get substituted data
         data = self.substitute_keywords()
-        layout = self.layout  # Assuming `self.layout` stores the selected layout
-        text = data.get("text", "")
-        image = data.get("image", "")
-
-        # Generate HTML based on the layout
-        if layout == "text-left-image-right":
+        
+        # Apply layout-specific HTML structure
+        if self.layout == "left_right":
             html = f"""
-            <div style="display: flex;">
-                <div style="flex: 1;">{text}</div>
-                <div style="flex: 1;"><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
+            <div class="layout-left-right">
+                <div class="text-left">{SanitizedText(data)}</div>
+                <div class="image-right"><img src="path/to/image.jpg" alt="Right Image"></div>
             </div>
             """
-        elif layout == "image-left-text-right":
+        elif self.layout == "top_bottom":
             html = f"""
-            <div style="display: flex;">
-                <div style="flex: 1;"><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
-                <div style="flex: 1;">{text}</div>
+            <div class="layout-top-bottom">
+                <div class="image-top"><img src="path/to/image.jpg" alt="Top Image"></div>
+                <div class="text-bottom">{SanitizedText(data)}</div>
             </div>
             """
-        elif layout == "text-above-image-below":
+        elif self.layout == "side_by_side":
             html = f"""
-            <div>
-                <div>{text}</div>
-                <div><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
+            <div class="layout-side-by-side">
+                <div class="content-side">{SanitizedText(data)}</div>
             </div>
             """
         else:
-            # Default layout or no layout provided
-            html = f"""
-            <div>
-                <div>{text}</div>
-            </div>
-            """
-
-        # Return the HTML directly
-        return html
+            # Default to plain sanitized content
+            html = SanitizedText(data)
+            return html
 
     def get_editable_fields(self):
         """
