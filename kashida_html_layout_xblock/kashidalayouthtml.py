@@ -142,31 +142,34 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
         return [
-            ('HTML5XBlock',
-             """<html5/>
-             """),
-            ('HTML5XBlock with sanitized content',
-             """<html5 data="My custom &lt;b&gt;html&lt;/b&gt;"/>
-             """),
-            ('HTML5XBlock with JavaScript',
-             """<html5
-                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
-                    allow_javascript="true"
+            ('HTML5XBlock - Default Layout',
+            """<html5/>
+            """),
+            ('HTML5XBlock - Text Left, Image Right',
+            """<html5
+                    layout="text-left-image-right"
+                    data='{"text": "This is some text on the left.", "image": "path/to/image1.jpg"}'
                 />
-             """),
-            ('HTML5XBlock with JavaScript not allowed',
-             """<html5
-                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
-                    allow_javascript="false"
+            """),
+            ('HTML5XBlock - Image Left, Text Right',
+            """<html5
+                    layout="image-left-text-right"
+                    data='{"text": "This is some text on the right.", "image": "path/to/image2.jpg"}'
                 />
-             """),
-            ('Multiple HTML5XBlock',
-             """<vertical_demo>
-                <html5/>
-                <html5/>
-                <html5/>
+            """),
+            ('HTML5XBlock - Text Above, Image Below',
+            """<html5
+                    layout="text-above-image-below"
+                    data='{"text": "This is some text above the image.", "image": "path/to/image3.jpg"}'
+                />
+            """),
+            ('HTML5XBlock - Multiple Layouts',
+            """<vertical_demo>
+                <html5 layout="text-left-image-right" data='{"text": "Text on the left.", "image": "path/to/image4.jpg"}'/>
+                <html5 layout="image-left-text-right" data='{"text": "Text on the right.", "image": "path/to/image5.jpg"}'/>
+                <html5 layout="text-above-image-below" data='{"text": "Text above the image.", "image": "path/to/image6.jpg"}'/>
                 </vertical_demo>
-             """),
+            """),
         ]
 
     def add_edit_stylesheets(self, frag):
@@ -245,11 +248,44 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
     @property
     def html(self):
         """
-        A property that returns this module content data, according to `allow_javascript`.
-        I.E: Sanitized data if it's true or plain data if it's false.
+        Returns the module content based on the selected layout and data.
         """
         data = self.substitute_keywords()
-        html = SanitizedText(data, allow_javascript=self.allow_javascript)
+        layout = self.layout  # Assuming `self.layout` stores the selected layout
+        text = data.get("text", "")
+        image = data.get("image", "")
+
+        # Generate HTML based on the layout
+        if layout == "text-left-image-right":
+            html = f"""
+            <div style="display: flex;">
+                <div style="flex: 1;">{text}</div>
+                <div style="flex: 1;"><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
+            </div>
+            """
+        elif layout == "image-left-text-right":
+            html = f"""
+            <div style="display: flex;">
+                <div style="flex: 1;"><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
+                <div style="flex: 1;">{text}</div>
+            </div>
+            """
+        elif layout == "text-above-image-below":
+            html = f"""
+            <div>
+                <div>{text}</div>
+                <div><img src="{image}" alt="Image" style="max-width: 100%;"/></div>
+            </div>
+            """
+        else:
+            # Default layout or no layout provided
+            html = f"""
+            <div>
+                <div>{text}</div>
+            </div>
+            """
+
+        # Return the HTML directly
         return html
 
     def get_editable_fields(self):
