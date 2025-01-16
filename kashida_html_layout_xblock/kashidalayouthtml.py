@@ -1,4 +1,4 @@
-"""This XBlock provides Kashida-specific HTML layout options."""
+"""This XBlock help creating a secure and easy-to-use HTML blocks in edx-platform."""
 
 import logging
 
@@ -19,31 +19,24 @@ xblock_loader = ResourceLoader(__name__)
 
 
 @XBlock.wants('settings')
-class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
+class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
     """
-    Kashida Layouts XBlock that provides predefined layout options like
-    image-left-text-right or image-right-text-left.
+    This XBlock will provide an HTML WYSIWYG interface in Studio to be rendered in LMS.
     """
 
     display_name = String(
         display_name=_('Display Name'),
         help=_('The display name for this component.'),
         scope=Scope.settings,
-        default=_('Kashida HTML Layouts ')
+        default=_('Text')
     )
-    data = String(help=_('Choose the layout for displaying content'), default='', scope=Scope.content)
-    layout = String(
-    display_name="Layout",
-    help=_("Choose a predefined layout to display your content."),
-    values=[
-            {"value": "left_right", "display_name": "Left Text, Right Image"},
-            {"value": "top_bottom", "display_name": "Top Image, Bottom Text"},
-            {"value": "side_by_side", "display_name": "Side by Side"},
-        ],
-        default="left_right",
-        scope=Scope.settings
+    data = String(help=_('Html contents to display for this module'), default='', scope=Scope.content)
+    allow_javascript = Boolean(
+        display_name=_('Allow JavaScript execution'),
+        help=_('Whether JavaScript should be allowed or not in this module'),
+        default=False,
+        scope=Scope.content
     )
-
     editor = String(
         help=_(
             'Select Visual to enter content and have the editor automatically create the HTML. Select Raw to edit '
@@ -57,8 +50,9 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
         ],
         scope=Scope.settings
     )
-    editable_fields = ('display_name', 'editor', 'layout')
-    block_settings_key = "kashida_layouts"
+    editable_fields = ('display_name', 'editor', 'allow_javascript')
+    block_settings_key = "html5"
+
     def get_settings(self):
         """
         Get the XBlock settings bucket via the SettingsService.
@@ -134,15 +128,33 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     def workbench_scenarios():
         """A canned scenario for display in the workbench."""
         return [
-        ('KashidaHTMLLayoutXBlock',
-         """<kashidahtml/>"""),
-        ('Multiple KashidaHTMLLayoutXBlock',
-         """<vertical_demo>
-            <kashidahtml/>
-            <kashidahtml/>s
-            </vertical_demo>
-         """),
+            ('HTML5XBlock',
+             """<html5/>
+             """),
+            ('HTML5XBlock with sanitized content',
+             """<html5 data="My custom &lt;b&gt;html&lt;/b&gt;"/>
+             """),
+            ('HTML5XBlock with JavaScript',
+             """<html5
+                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
+                    allow_javascript="true"
+                />
+             """),
+            ('HTML5XBlock with JavaScript not allowed',
+             """<html5
+                    data="My custom &lt;b&gt;html&lt;/b&gt;&lt;script&gt;alert('With javascript');&lt;/script&gt;"
+                    allow_javascript="false"
+                />
+             """),
+            ('Multiple HTML5XBlock',
+             """<vertical_demo>
+                <html5/>
+                <html5/>
+                <html5/>
+                </vertical_demo>
+             """),
         ]
+
     def add_edit_stylesheets(self, frag):
         """
         A helper method to add all styles to the fragment necesesary for edit.
@@ -219,37 +231,11 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     @property
     def html(self):
         """
-        A property that returns this module's content data with layout rendering applied.
-        Substitutes keywords and includes layout-specific wrapping if applicable.
+        A property that returns this module content data, according to `allow_javascript`.
+        I.E: Sanitized data if it's true or plain data if it's false.
         """
-        # Get substituted data
         data = self.substitute_keywords()
-        
-        # Apply layout-specific HTML structure
-        if self.layout == "left_right":
-            html = f"""
-            <div class="layout-left-right">
-                <div class="text-left">{SanitizedText(data)}</div>
-                <div class="image-right"><img src="path/to/image.jpg" alt="Right Image"></div>
-            </div>
-            """
-        elif self.layout == "top_bottom":
-            html = f"""
-            <div class="layout-top-bottom">
-                <div class="image-top"><img src="path/to/image.jpg" alt="Top Image"></div>
-                <div class="text-bottom">{SanitizedText(data)}</div>
-            </div>
-            """
-        elif self.layout == "side_by_side":
-            html = f"""
-            <div class="layout-side-by-side">
-                <div class="content-side">{SanitizedText(data)}</div>
-            </div>
-            """
-        else:
-            # Default to plain sanitized content
-            html = SanitizedText(data)
-        
+        html = SanitizedText(data, allow_javascript=self.allow_javascript)
         return html
 
     def get_editable_fields(self):
