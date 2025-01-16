@@ -1,18 +1,18 @@
 /* Base Styles */
 .html-editor,
 .wrapper-comp-settings.is-active.editor-with-buttons {
-    height: auto; /* Allow for dynamic height */
-    min-height: 320px; /* Ensure a minimum height */
+    height: auto;
+    min-height: 320px;
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: auto; /* Handle content overflow */
+    overflow: auto;
 }
 
 [class*="view-"] .modal-window .CodeMirror,
 [class*="view-"] .modal-window .editor-with-buttons.wrapper-comp-settings .list-input.settings-list {
     height: 322px;
-    overflow: auto; /* Handle overflow for these specific elements */
+    overflow: auto;
 }
 
 /* Tab Styles */

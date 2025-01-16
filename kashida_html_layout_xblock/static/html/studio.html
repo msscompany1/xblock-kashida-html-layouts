@@ -6,6 +6,16 @@
 
   <div id="editor" class="tabcontent">
     <div class="html-editor editor">
+      <div class="layout-selector">
+        <label for="layout-selector">Select Layout:</label>
+        <select id="layout-selector" class="form-control" onchange="changeLayout(this)">
+          <option value="left_right" {% if self.layout == 'left_right' %}selected{% endif %}>Text on the Left, Image on the Right</option>
+          <option value="top_bottom" {% if self.layout == 'top_bottom' %}selected{% endif %}>Image on Top, Text on Bottom</option>
+          <option value="side_by_side" {% if self.layout == 'side_by_side' %}selected{% endif %}>Side by Side</option>
+          <option value="text_right_image_left" {% if self.layout == 'text_right_image_left' %}selected{% endif %}>Text on the Right, Image on the Left</option>
+        </select>
+      </div>
+
       {% if self.layout == "left_right" %}
       <div class="left-right-layout">
         <div class="text-left">
@@ -16,6 +26,19 @@
           <label for="right-image">Image</label>
           <input type="file" id="right-image" class="form-control" onchange="previewImage('right-image-preview', this)">
           <img id="right-image-preview" class="image-preview" src="{{ self.data.image }}" alt="Preview" />
+        </div>
+      </div>
+
+      {% elif self.layout == "text_right_image_left" %}
+      <div class="text-right-image-left-layout">
+        <div class="text-right">
+          <label for="right-text">Text</label>
+          <textarea id="right-text" class="form-control" placeholder="Enter text">{{ self.data.text }}</textarea>
+        </div>
+        <div class="image-left">
+          <label for="left-image">Image</label>
+          <input type="file" id="left-image" class="form-control" onchange="previewImage('left-image-preview', this)">
+          <img id="left-image-preview" class="image-preview" src="{{ self.data.image }}" alt="Preview" />
         </div>
       </div>
 
@@ -51,6 +74,7 @@
       </div>
       {% endif %}
     </div>
+    
     <div class="xblock-actions">
       <span class="xblock-editor-error-message"></span>
       <ul>

@@ -214,18 +214,24 @@ function KashidaHTMLLayoutXBlock(runtime, element, data) {
   function studioSubmit() {
     const ContentHandlerUrl = runtime.handlerUrl(element, "update_content");
     const SettingsHandlerUrl = runtime.handlerUrl(element, "submit_studio_edits");
-    
+
     // Get content based on the editor type (visual/raw)
     const content = (data.editor === "visual") ? tinymce.get("html5-textarea").getContent() : editor.getValue();
     
-    // Get layout value
-    const layout = data.layout;  // Assuming `data.layout` holds the selected layout value
+    // Get layout value (from the layout selector)
+    const layout = document.getElementById("layout-selector").value;
+
+    // Get image and text input values
+    const image = document.getElementById("image-input").value;
+    const text = document.getElementById("text-input").value;
     
     // Collect all settings data
     const fields_data = getSettingsValues(fields);
-    
-    // Add layout data to the fields_data object
+
+    // Add additional data (layout, image, text)
     fields_data.layout = layout;
+    fields_data.image = image;
+    fields_data.text = text;
 
     var errorMessage = "This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.";
 
@@ -237,7 +243,7 @@ function KashidaHTMLLayoutXBlock(runtime, element, data) {
       url: SettingsHandlerUrl,
       data: JSON.stringify(fields_data),
       dataType: "json",
-      global: false,  // Disable Studio's error handling that conflicts with studio's notify('save') and notify('cancel') :-/
+      global: false,  // Disable Studio's error handling that conflicts with studio's notify('save') and notify('cancel')
       success: function (response) {
         // After settings are saved, update the content
         $.ajax({
@@ -245,7 +251,7 @@ function KashidaHTMLLayoutXBlock(runtime, element, data) {
           url: ContentHandlerUrl,
           data: JSON.stringify({ "content": content }),
           dataType: "json",
-          global: false,  // Disable Studio's error handling that conflicts with studio's notify('save') and notify('cancel') :-/
+          global: false,  // Disable Studio's error handling
           success: function (response) {
             runtime.notify('save', { state: 'end' });
           }
@@ -271,25 +277,25 @@ function KashidaHTMLLayoutXBlock(runtime, element, data) {
     })
   }
 
-element = typeof element[0] === 'undefined' ? element : element[0];  // Fix: sometimes edX passes a jQuery element, other times a DOM element
+  element = typeof element[0] === 'undefined' ? element : element[0];  // Fix: sometimes edX passes a jQuery element, other times a DOM element
 
-// Adding click event listeners
-const addClickFn = function (el, fn) {
+  // Adding click event listeners
+  const addClickFn = function (el, fn) {
     el.addEventListener("click", function (event) {
       event.preventDefault();
       fn(event);
     });
-};
+  };
 
-// Save button click
-element.querySelectorAll('.save-button').forEach(button => {
+  // Save button click
+  element.querySelectorAll('.save-button').forEach(button => {
     addClickFn(button, studioSubmit);
-});
+  });
 
-// Cancel button click
-element.querySelectorAll('.cancel-button').forEach(button => {
+  // Cancel button click
+  element.querySelectorAll('.cancel-button').forEach(button => {
     addClickFn(button, function () {
       runtime.notify('cancel', {});
     });
-});
+  });
 }
