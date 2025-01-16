@@ -28,13 +28,27 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
         display_name=_('Display Name'),
         help=_('The display name for this component.'),
         scope=Scope.settings,
-        default=_('Text')
+        default=_('kashida HTML Layouts')
     )
-    data = String(help=_('Html contents to display for this module'), default='', scope=Scope.content)
-    allow_javascript = Boolean(
-        display_name=_('Allow JavaScript execution'),
-        help=_('Whether JavaScript should be allowed or not in this module'),
-        default=False,
+    layout_choice = String(
+    help=_(
+        'Select the layout to display: e.g., Image on the right and text on the left, or other layout options. '
+        'If you change this setting, you must save the component and then re-open it for editing.'
+    ),
+    display_name=_('Layout Choice'),
+    default='image_right_text_left',
+    values=[
+        {'display_name': _('Image on the right, text on the left'), 'value': 'image_right_text_left'},
+        {'display_name': _('Image on the left, text on the right'), 'value': 'image_left_text_right'},
+        {'display_name': _('Text only'), 'value': 'text_only'},
+        {'display_name': _('Image only'), 'value': 'image_only'}
+    ],
+    scope=Scope.content
+    )
+
+    data = String(
+        help=_('Html contents to display for this module'),
+        default='',
         scope=Scope.content
     )
     editor = String(
