@@ -30,20 +30,17 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
         scope=Scope.settings,
         default=_('kashida HTML Layouts')
     )
-    layout_choice = String(
-    help=_(
-        'Select the layout to display: e.g., Image on the right and text on the left, or other layout options. '
-        'If you change this setting, you must save the component and then re-open it for editing.'
-    ),
-    display_name=_('Layout Choice'),
-    default='image_right_text_left',
-    values=[
-        {'display_name': _('Image on the right, text on the left'), 'value': 'image_right_text_left'},
-        {'display_name': _('Image on the left, text on the right'), 'value': 'image_left_text_right'},
-        {'display_name': _('Text only'), 'value': 'text_only'},
-        {'display_name': _('Image only'), 'value': 'image_only'}
-    ],
-    scope=Scope.content
+    data = String(help=_('Choose the layout for displaying content'), default='', scope=Scope.content)
+    layout = String(
+        display_name="Layout",
+        help=_("Choose a predefined layout to display your content."),
+        values=[
+                {"value": "left_right", "display_name": "Left Text, Right Image"},
+                {"value": "top_bottom", "display_name": "Top Image, Bottom Text"},
+                {"value": "side_by_side", "display_name": "Side by Side"},
+            ],
+            default="left_right",
+            scope=Scope.settings
     )
 
     data = String(
@@ -64,7 +61,7 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
         ],
         scope=Scope.settings
     )
-    editable_fields = ('display_name', 'editor', 'layout_choice')
+    editable_fields = ('display_name', 'editor', 'layout')
     block_settings_key = "html5"
 
     def get_settings(self):
