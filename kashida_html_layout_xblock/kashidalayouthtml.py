@@ -36,7 +36,7 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     display_name="Layout",
     help=_("Choose a predefined layout to display your content."),
     values=[
-            {"value": "left_right", "display_name": "Right Text, Left Image"},
+            {"value": "left_right", "display_name": "Left Text, Right Image"},
             {"value": "top_bottom", "display_name": "Top Image, Bottom Text"},
             {"value": "side_by_side", "display_name": "Side by Side"},
         ],
@@ -93,48 +93,29 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
 
     def studio_view(self, context=None):
         """
-        Return a fragment that contains the HTML for the Studio view, including layout selection.
+        Return a fragment that contains the html for the Studio view.
         """
         frag = Fragment()
 
-        # Get all editable fields, including the new layout field
         settings_fields = self.get_editable_fields()
-        settings_fields.append({
-            'name': 'layout',
-            'type': 'string',
-            'display_name': _('Layout'),
-            'help': _('Choose a predefined layout to display your content.'),
-            'values': [
-                {'value': 'left_right', 'display_name': _('Left Text, Right Image')},
-                {'value': 'top_bottom', 'display_name': _('Top Image, Bottom Text')},
-                {'value': 'side_by_side', 'display_name': _('Side by Side')},
-            ],
-            'default': 'left_right',
-        })
-
-        # Render settings page with the fields
         settings_page = loader.render_django_template('templates/studio_edit.html', {'fields': settings_fields})
         context = {
             'self': self,
             'settings_page': settings_page,
         }
 
-        # Render the Studio HTML
         frag.content = xblock_loader.render_django_template('static/html/studio.html', context)
 
-        # Add stylesheets and scripts
         self.add_edit_stylesheets(frag)
         self.add_edit_scripts(frag)
 
-        # Initialize JavaScript with additional data, if needed
         js_data = {
             'editor': self.editor,
             'script_url': settings.STATIC_URL + 'js/vendor/tinymce/js/tinymce/tinymce.full.min.js',
             'skin_url': settings.STATIC_URL + 'js/vendor/tinymce/js/tinymce/skins/ui/studio-tmce5',
             'codemirror_path': settings.STATIC_URL + 'js/vendor/',
             'external_plugins': self.get_editor_plugins(),
-            'table_custom_classes': self.get_settings().get("table_custom_classes", []),
-            'layout': self.layout,  # Pass layout data for use in JavaScript
+            'table_custom_classes': self.get_settings().get("table_custom_classes", [])
         }
         frag.initialize_js('KashidaHTMLLayoutXBlock', js_data)
 
@@ -143,19 +124,11 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
     @XBlock.json_handler
     def update_content(self, data, suffix=''):  # pylint: disable=unused-argument
         """
-        Update the saved HTML data and layout with the new values passed in the JSON fields.
+        Update the saved HTML data with the new HTML passed in the JSON 'content' field.
         """
-        # Update the content
-        self.data = data.get('content', self.data)
+        self.data = data['content']
 
-        # Update the layout if provided
-        if 'layout' in data:
-            self.layout = data['layout']
-
-        return {
-            'content': self.data,
-            'layout': self.layout
-        }
+        return {'content': self.data}
 
     @staticmethod
     def workbench_scenarios():
@@ -300,27 +273,11 @@ class KashidaHTMLLayoutXBlock (StudioEditableXBlockMixin, XBlock):
                 'not generally created/configured by content authors in Studio.'
             )
             field_info = self._make_field_info(field_name, field)
-             # Handle the "layout" field with additional logic if necessary
-            if field_name == "layout":
-                    field_info = {
-                        "name": field_name,
-                        "type": "string",
-                        "display_name": _("Layout"),
-                        "help": _("Choose a predefined layout to display your content."),
-                        "values": [
-                            {"value": "left_right", "display_name": _("Left Text, Right Image")},
-                            {"value": "top_bottom", "display_name": _("Top Image, Bottom Text")},
-                            {"value": "side_by_side", "display_name": _("Side by Side")},
-                        ],
-                        "default": "left_right",
-                    }
-            else:
-                    field_info = self._make_field_info(field_name, field)
-
             if field_info is not None:
-                    fields.append(field_info)
+                fields.append(field_info)
 
-            return fields
+        return fields
+
 
 class ExcludedHTML5XBlock(KashidaHTMLLayoutXBlock):
     """
