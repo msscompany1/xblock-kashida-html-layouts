@@ -205,101 +205,118 @@ function extractXBlockFields() {
 }
 
 function KashidaHTMLLayoutXBlock(runtime, element, data) {
-  document.getElementById("default-tab").click();  // Will open the XBlock by showing the default tab
+  // Ensure the default tab is selected
+  const defaultTab = document.getElementById("default-tab");
+  if (defaultTab) {
+      defaultTab.click();
+  }
 
+  // Configure the editor
   const editor = configureTheEditor(data);
-  var fields = extractXBlockFields();
-  var elements;
 
-  // Extract values for text content, image URL, and layout
+  // Extract XBlock fields (ensure the function is defined elsewhere)
+  var fields = extractXBlockFields();
+
+  // Extract default values for text content, image URL, and layout
   var textContent = data.text_content || "";
   var imageUrl = data.image_url || "";
   var layout = data.layout || "left_right";  // Default layout
 
+  // Function to handle form submission
   function studioSubmit() {
-    const ContentHandlerUrl = runtime.handlerUrl(element, "update_content");
-    const SettingsHandlerUrl = runtime.handlerUrl(element, "submit_studio_edits");
+      // Define the URLs for content and settings submission
+      const ContentHandlerUrl = runtime.handlerUrl(element, "update_content");
+      const SettingsHandlerUrl = runtime.handlerUrl(element, "submit_studio_edits");
 
-    // Get the content from the editor (text content from textarea or raw editor value)
-    const content = (data.editor === "visual") ? document.getElementById("text-content").value : editor.getValue();
+      // Get the content from the editor based on the editor mode
+      const content = (data.editor === "visual")
+          ? document.getElementById("text-content").value
+          : editor.getValue();
 
-    // Get the image URL from the input field
-    const imageUrl = document.getElementById("image-url").value;
+      // Get the image URL from the input field
+      const imageUrl = document.getElementById("image-url")?.value || "";
 
-    // Get the layout value (you can customize this based on your specific layout logic)
-    const layout = document.querySelector('.layout-wrapper').getAttribute('data-layout');  // Example, adjust if needed
+      // Get the layout value
+      const layout = document.querySelector('.layout-wrapper')?.getAttribute('data-layout') || "left_right";
 
-    // Update fields data with current content, image URL, and layout
-    const fields_data = {
-        text_content: content,
-        image_url: imageUrl,
-        layout: layout,
-    };
+      // Prepare the data to be sent to the server
+      const fields_data = {
+          text_content: textContent,
+          image_url: imageUrl,
+          layout: layout,
+      };
 
-    // Error handling message
-    var errorMessage = "This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.";
+      // Define error message to show if AJAX fails
+      var errorMessage = "This may be happening because of an error with our server or your internet connection. Try refreshing the page or making sure you are online.";
 
-    // Notify Studio that save process is starting
-    runtime.notify('save', { state: 'start', message: "Saving" });
+      // Notify Studio that the save process has started
+      runtime.notify('save', { state: 'start', message: "Saving" });
 
-    // Make AJAX request to submit settings
-    $.ajax({
-      type: "POST",
-      url: SettingsHandlerUrl,
-      data: JSON.stringify(fields_data),
-      dataType: "json",
-      global: false,  // Disable Studio's error handling that conflicts with studio's notify('save') and notify('cancel')
-      success: function (response) {
-        // Once settings are saved, save content data
-        $.ajax({
+      // Send AJAX request to update settings
+      $.ajax({
           type: "POST",
-          url: ContentHandlerUrl,
-          data: JSON.stringify({ "content": content }),
+          url: SettingsHandlerUrl,
+          data: JSON.stringify(fields_data),
           dataType: "json",
-          global: false,
-          success: function (response) {
-            runtime.notify('save', { state: 'end' });
+          global: false,  // Prevent conflict with Studio's error handling
+          success: function () {
+              // Once settings are saved, send AJAX request to update content
+              $.ajax({
+                  type: "POST",
+                  url: ContentHandlerUrl,
+                  data: JSON.stringify({ "content": content }),
+                  dataType: "json",
+                  global: false,
+                  success: function () {
+                      // Notify Studio that save has completed
+                      runtime.notify('save', { state: 'end' });
+                  },
+                  fail: function () {
+                      // Notify error if content update fails
+                      runtime.notify('error', { title: "Unable to update content", message: errorMessage });
+                  }
+              });
+          },
+          fail: function (jqXHR) {
+              // Error handling for settings update
+              if (jqXHR.responseText) {
+                  try {
+                      errorMessage = JSON.parse(jqXHR.responseText).error || errorMessage;
+                      if (typeof errorMessage === "object" && errorMessage.messages) {
+                          // Extract specific error messages if available
+                          errorMessage = $.map(errorMessage.messages, function (msg) {
+                              return msg.text;
+                          }).join(", ");
+                      }
+                  } catch (error) {
+                      errorMessage = jqXHR.responseText.substr(0, 300);
+                  }
+              }
+              // Notify Studio of the error
+              runtime.notify('error', { title: "Unable to update settings", message: errorMessage });
           }
-        }).fail(function (jqXHR) {
-          runtime.notify('error', { title: "Unable to update content", message: errorMessage });
-        })
-      }
-    }).fail(function (jqXHR) {
-      if (jqXHR.responseText) { // Is there a more specific error message we can show?
-        try {
-          errorMessage = JSON.parse(jqXHR.responseText).error;
-          if (typeof errorMessage === "object" && errorMessage.messages) {
-            // e.g. {"error": {"messages": [{"text": "Unknown user 'bob'!", "type": "error"}, ...]}} etc.
-            errorMessage = $.map(errorMessage.messages, function (msg) {
-              return msg.text;
-            }).join(", ");
-          }
-        } catch (error) {
-          errorMessage = jqXHR.responseText.substr(0, 300);
-        }
-      }
-      runtime.notify('error', { title: "Unable to update settings", message: errorMessage });
-    })
+      });
   }
 
-  element = typeof element[0] === 'undefined' ? element : element[0];  // Fix: sometimes edX passes a jQuery
-  // element, other times a DOM element
+  // Normalize the element to handle both jQuery and DOM elements
+  element = Array.isArray(element) ? element[0] : element;
 
+  // Utility function to add click event listener to elements
   const addClickFn = function (el, fn) {
-    el.addEventListener("click", function (event) {
-      event.preventDefault();
-      fn(event);
-    });
+      el.addEventListener("click", function (event) {
+          event.preventDefault();
+          fn(event);
+      });
   };
 
-  // Attach save and cancel buttons to their respective handlers
+  // Attach event listeners for save and cancel buttons
   element.querySelectorAll('.save-button').forEach(button => {
-    addClickFn(button, studioSubmit);
+      addClickFn(button, studioSubmit);
   });
 
   element.querySelectorAll('.cancel-button').forEach(button => {
-    addClickFn(button, function () {
-      runtime.notify('cancel', {});
-    });
+      addClickFn(button, function () {
+          runtime.notify('cancel', {});
+      });
   });
 }
