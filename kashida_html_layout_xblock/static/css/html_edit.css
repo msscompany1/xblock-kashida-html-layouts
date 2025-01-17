@@ -1,22 +1,26 @@
+/* General Styling for Editor */
 .html-editor,
 .wrapper-comp-settings.is-active.editor-with-buttons {
     height: 320px;
+    padding: 15px;
 }
 
+/* Modal Window and Editor */
 [class*="view-"] .modal-window .CodeMirror,
 [class*="view-"] .modal-window .editor-with-buttons.wrapper-comp-settings .list-input.settings-list {
     height: 322px;
 }
 
-/* Style the tab */
+/* Tab Styling */
 .tab {
     overflow: hidden;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    background-color: #f4f4f4;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 15px;
 }
 
-/* Style the buttons inside the tab */
+/* Tab Buttons */
 .tab button {
     background-color: #4CAF50;
     color: white;
@@ -24,9 +28,9 @@
     border: none;
     outline: none;
     cursor: pointer;
-    padding: 14px 16px;
-    transition: 0.3s;
-    font-size: 17px;
+    padding: 14px 18px;
+    transition: background-color 0.3s;
+    font-size: 16px;
     border-radius: 5px 5px 0 0;
     margin-right: 5px;
 }
@@ -39,55 +43,108 @@
     background-color: #3e8e41;
 }
 
+/* Tab Content */
 .tabcontent {
     display: none;
-    padding: 10px;
+    padding: 20px;
     border-top: 3px solid #4CAF50;
     background-color: #ffffff;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    animation: fadeEffect 0.3s;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeEffect 0.3s ease-in-out;
 }
 
-/* Animations for tab content */
+/* Tab Content Animation */
 @keyframes fadeEffect {
-    from {opacity: 0;}
-    to {opacity: 1;}
+    from { opacity: 0; }
+    to { opacity: 1; }
 }
 
-/* Text Area and Input Styling */
+/* Layout Wrapper */
+.layout-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e0e0e0;
+}
+
+.layout-wrapper[data-layout="left_right"] {
+    flex-direction: row;
+}
+
+.layout-wrapper[data-layout="top_bottom"] {
+    flex-direction: column;
+}
+
+/* Text Area */
 .text-area textarea,
 .image-input input {
     width: 100%;
-    padding: 10px;
+    padding: 12px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 6px;
     box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
     font-size: 14px;
-    background-color: #f9f9f9;
+    background-color: #f1f1f1;
+    transition: border-color 0.3s ease-in-out;
 }
 
 .text-area textarea:focus,
 .image-input input:focus {
     border-color: #4CAF50;
     outline: none;
-    box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.6);
 }
 
-/* Labels Styling */
+/* Image Input */
+.image-input {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.image-input input {
+    flex: 1;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+/* Labels */
 .field label {
     font-weight: bold;
     color: #333;
-    margin-bottom: 5px;
-    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
 }
 
-/* Wrapper Styling */
-.layout-wrapper {
+/* Save and Cancel Button Styling */
+.xblock-actions {
     display: flex;
+    justify-content: flex-end;
     gap: 10px;
-    padding: 15px;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    background-color: #f7f7f7;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.xblock-actions .action-item a {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.xblock-actions .action-item a:hover {
+    background-color: #45a049;
+}
+
+.xblock-actions .action-item .cancel-button {
+    background-color: #f44336;
+}
+
+.xblock-actions .action-item .cancel-button:hover {
+    background-color: #e53935;
 }

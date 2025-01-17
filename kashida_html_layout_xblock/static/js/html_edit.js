@@ -220,14 +220,20 @@ function KashidaHTMLLayoutXBlock(runtime, element, data) {
     const ContentHandlerUrl = runtime.handlerUrl(element, "update_content");
     const SettingsHandlerUrl = runtime.handlerUrl(element, "submit_studio_edits");
 
-    // Get the content from the editor
-    const content = (data.editor === "visual") ? tinymce.get("html5-textarea").getContent() : editor.getValue();
+    // Get the content from the editor (text content from textarea or raw editor value)
+    const content = (data.editor === "visual") ? document.getElementById("text-content").value : editor.getValue();
+
+    // Get the image URL from the input field
+    const imageUrl = document.getElementById("image-url").value;
+
+    // Get the layout value (you can customize this based on your specific layout logic)
+    const layout = document.querySelector('.layout-wrapper').getAttribute('data-layout');  // Example, adjust if needed
 
     // Update fields data with current content, image URL, and layout
     const fields_data = {
-      text_content: textContent,
-      image_url: imageUrl,
-      layout: layout,
+        text_content: content,
+        image_url: imageUrl,
+        layout: layout,
     };
 
     // Error handling message

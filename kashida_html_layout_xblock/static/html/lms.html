@@ -1,1 +1,39 @@
-<div class="html5_xblock xmodule_display xmodule_HtmlBlock">{{ self.html | safe }}</div>
+<div class="html5_xblock xmodule_display xmodule_HtmlBlock">
+    {% if self.layout == "left_right" %}
+        <!-- Left Text, Right Image Layout -->
+        <div class="layout-wrapper" style="display: flex; gap: 10px;">
+            <div class="text-area" style="flex: 1; margin-right: 10px;">
+                <label for="text-content">Text Content:</label>
+                <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+            </div>
+            <div class="image-input" style="flex: 1; margin-left: 10px;">
+                <label for="image-url">Image URL:</label>
+                <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+            </div>
+        </div>
+    {% elif self.layout == "top_bottom" %}
+        <!-- Top Image, Bottom Text Layout -->
+        <div class="layout-wrapper">
+            <div class="image-input" style="margin-bottom: 10px;">
+                <label for="image-url">Image URL:</label>
+                <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+            </div>
+            <div class="text-area">
+                <label for="text-content">Text Content:</label>
+                <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+            </div>
+        </div>
+    {% elif self.layout == "side_by_side" %}
+        <!-- Side by Side (50% Width Each) Layout -->
+        <div class="layout-wrapper" style="display: flex; gap: 10px;">
+            <div class="text-area" style="flex: 1; margin-right: 10px;">
+                <label for="text-content">Text Content:</label>
+                <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+            </div>
+            <div class="image-input" style="flex: 1; margin-left: 10px;">
+                <label for="image-url">Image URL:</label>
+                <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+            </div>
+        </div>
+    {% endif %}
+</div>

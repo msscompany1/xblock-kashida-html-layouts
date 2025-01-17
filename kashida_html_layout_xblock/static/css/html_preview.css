@@ -1,30 +1,37 @@
-/* This css file contains styles that should be used for the XBlock preview in
- * studio.
- *
- * It contains the fix for rendering tables in studio preview, which is
- * caused by global studio styles. These global styles set `border: 0;` for
- * tables and their elements, which removes the borders from these elements. */
+/* This css file contains styles for the XBlock preview in studio. */
 
-/* fall back to default browser styles for all rows; the inline styles (like
- * border style and color) would overwrite it */
- .studio-xblock-wrapper .html5_xblock table > * > tr {
+/* General Styles */
+.studio-xblock-wrapper .html5_xblock {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  color: #333;
+}
+
+/* Table Styling */
+.studio-xblock-wrapper .html5_xblock table {
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Border Handling */
+.studio-xblock-wrapper .html5_xblock table > * > tr {
   border: unset;
 }
 
-/* fall back to default browser styles, if border attribute is not set; the
- * inline styles (like border style and color) would overwrite it */
 .studio-xblock-wrapper .html5_xblock table:not([border]) {
   border: unset;
 }
 
-/* default styles for any table that had border attribute set; the inline
- * styles (like border style and color) would overwrite it */
+/* Default Table Border */
 .studio-xblock-wrapper .html5_xblock table[border] {
-  border: 1px solid black;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
-/* change the border width, depending on the explicit value of the border
- * attribute */
+/* Border Width Based on Attribute */
 .studio-xblock-wrapper .html5_xblock table[border="1"] {
   border-width: 1px;
 }
@@ -64,14 +71,122 @@
 .studio-xblock-wrapper .html5_xblock table[border="10"] {
   border-width: 10px;
 }
-/* etc until the value we think is reasonable */
 
-.studio-xblock-wrapper .html5_xblock table[border] > * > tr > td,
-.studio-xblock-wrapper .html5_xblock table[border] > * > tr > th,
-.studio-xblock-wrapper .html5_xblock table[border] > * > td,
-.studio-xblock-wrapper .html5_xblock table[border] > * > th,
-.studio-xblock-wrapper .html5_xblock table[border] > td,
-.studio-xblock-wrapper .html5_xblock table[border] > th {
+/* Table Cell Borders */
+.studio-xblock-wrapper .html5_xblock table[border] td,
+.studio-xblock-wrapper .html5_xblock table[border] th {
   border-width: thin;
   border-style: inset;
+  padding: 10px;
+  text-align: left;
+}
+
+/* Table Header Styling */
+.studio-xblock-wrapper .html5_xblock table th {
+  background-color: #4CAF50;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+  padding: 12px 10px;
+}
+
+/* Table Row Styling */
+.studio-xblock-wrapper .html5_xblock table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.studio-xblock-wrapper .html5_xblock table tr:hover {
+  background-color: #ddd;
+}
+
+/* Input Fields and Text Areas */
+.studio-xblock-wrapper .html5_xblock input[type="text"],
+.studio-xblock-wrapper .html5_xblock textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background-color: #fff;
+  transition: border-color 0.3s;
+}
+
+.studio-xblock-wrapper .html5_xblock input[type="text"]:focus,
+.studio-xblock-wrapper .html5_xblock textarea:focus {
+  border-color: #4CAF50;
+  outline: none;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Label Styling */
+.studio-xblock-wrapper .html5_xblock label {
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+  display: block;
+}
+
+/* Layout Wrapper for Flex Layout */
+.layout-wrapper {
+  display: flex;
+  gap: 15px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fafafa;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for Layout Text and Image Inputs */
+.text-area, .image-input {
+  flex: 1;
+  padding: 10px;
+}
+
+.text-area textarea {
+  width: 100%;
+  height: 150px;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+.image-input input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+  background-color: #f9f9f9;
+}
+
+/* Button Styling for Actions */
+.studio-xblock-wrapper .html5_xblock .btn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.studio-xblock-wrapper .html5_xblock .btn:hover {
+  background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .layout-wrapper {
+      flex-direction: column;
+  }
+
+  .text-area,
+  .image-input {
+      flex: none;
+      width: 100%;
+  }
 }
