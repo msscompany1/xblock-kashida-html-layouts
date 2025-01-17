@@ -1,13 +1,45 @@
 <div class="wrapper-comp-editor editor-with-buttons" id="editor-tab" data-editor="{self.editor}">
   <div class="tab">
-    <button class="tablinks" aria-selected="true" onclick="openTab(event, 'editor')" id="default-tab" >Editor</button>
+    <button class="tablinks" aria-selected="true" onclick="openTab(event, 'editor')" id="default-tab">Editor</button>
     <button class="tablinks" aria-selected="false" onclick="openTab(event, 'settings')">Settings</button>
   </div>
 
+  <!-- Editor Tab -->
   <div id="editor" class="tabcontent">
     <div class="html-editor editor">
-      <div class="row">
-        <textarea id="html5-textarea">{{ self.data }}</textarea>
+      <!-- Layout Wrapper -->
+      <div class="layout-wrapper" data-layout="{{ self.layout }}">
+        {% if self.layout == "left_right" %}
+          <!-- Left Text, Right Image -->
+          <div class="text-area" style="flex: 1; margin-right: 10px;">
+            <label for="text-content">Text Content:</label>
+            <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+          </div>
+          <div class="image-input" style="flex: 1; margin-left: 10px;">
+            <label for="image-url">Image URL:</label>
+            <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+          </div>
+        {% elif self.layout == "top_bottom" %}
+          <!-- Top Image, Bottom Text -->
+          <div class="image-input" style="margin-bottom: 10px;">
+            <label for="image-url">Image URL:</label>
+            <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+          </div>
+          <div class="text-area">
+            <label for="text-content">Text Content:</label>
+            <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+          </div>
+        {% elif self.layout == "side_by_side" %}
+          <!-- Side by Side (50% Width Each) -->
+          <div class="text-area" style="flex: 1; margin-right: 10px;">
+            <label for="text-content">Text Content:</label>
+            <textarea id="text-content" style="width: 100%; height: 100px;">{{ self.text_content }}</textarea>
+          </div>
+          <div class="image-input" style="flex: 1; margin-left: 10px;">
+            <label for="image-url">Image URL:</label>
+            <input type="text" id="image-url" value="{{ self.image_url }}" style="width: 100%;" />
+          </div>
+        {% endif %}
       </div>
     </div>
     <div class="xblock-actions">
@@ -23,6 +55,7 @@
     </div>
   </div>
 
+  <!-- Settings Tab -->
   <div id="settings" class="tabcontent">
     {{ settings_page | safe }}
   </div>

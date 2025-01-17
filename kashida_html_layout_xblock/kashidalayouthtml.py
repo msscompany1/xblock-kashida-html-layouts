@@ -127,13 +127,20 @@ class KashidaHTMLLayoutXBlock(StudioEditableXBlockMixin, XBlock):
         return frag
 
     @XBlock.json_handler
-    def update_content(self, data, suffix=''):  # pylint: disable=unused-argument
+    def update_content(self, data, suffix=''):
         """
-        Update the saved HTML data with the new HTML passed in the JSON 'content' field.
+        Update the saved HTML data with the new HTML passed in the JSON 'content' field,
+        including the predefined layout with text content and image URL.
         """
-        self.data = data['content']
+        self.text_content = data.get('text_content', '')
+        self.image_url = data.get('image_url', '')
+        self.layout = data.get('layout', 'left_right')
 
-        return {'content': self.data}
+        return {
+            'text_content': self.text_content,
+            'image_url': self.image_url,
+            'layout': self.layout
+        }
 
     @staticmethod
     def workbench_scenarios():
